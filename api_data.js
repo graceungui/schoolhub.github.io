@@ -1741,6 +1741,13 @@ define({ "api": [
             "optional": false,
             "field": "file",
             "description": "<p>The file to be uploaded</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "assignment_id",
+            "description": "<p>the activity id</p>"
           }
         ]
       }
