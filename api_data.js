@@ -1124,7 +1124,7 @@ define({ "api": [
   {
     "type": "",
     "url": "<HOST>/class/lesson-plan/save",
-    "title": "Save class lesson plan",
+    "title": "Add/Edit Lesson Plan",
     "version": "1.0.0",
     "name": "SaveLessonPlan",
     "description": "<p>Saves lesson plan URL and title</p>",
