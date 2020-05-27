@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "version": "0.0.0",
+  "name": "test",
+  "version": "1.0.0",
   "description": "",
   "title": "School Hub",
   "sampleUrl": "",
@@ -8,7 +8,7 @@
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-05-24T06:23:12.380Z",
+    "time": "2020-05-27T14:40:16.453Z",
     "url": "http://apidocjs.com",
     "version": "0.17.6"
   }

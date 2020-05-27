@@ -376,6 +376,64 @@
   },
   {
     "type": "post",
+    "url": "HOST/api/changePassword",
+    "title": "User Change Password",
+    "version": "1.0.0",
+    "name": "ChangePassword",
+    "description": "<p>Changes password for a given user ID. Returns HTTP error code 401 if supplied credentials is invalid</p>",
+    "group": "Auth",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>username/student ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>new password</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "current_password",
+            "description": "<p>old password</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>returns true if change password is successful</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Sample Response",
+          "content": "{\n     \"success\": true\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/Http/Controllers/AuthController.php",
+    "groupTitle": "Auth"
+  },
+  {
+    "type": "post",
     "url": "HOST/api/login",
     "title": "User login",
     "version": "1.0.0",
@@ -397,7 +455,7 @@
             "type": "String",
             "optional": false,
             "field": "password",
-            "description": "<p>Hashed password (WIP)</p>"
+            "description": "<p>password entered by user.</p>"
           }
         ]
       }
@@ -644,8 +702,45 @@
   },
   {
     "type": "POST",
+    "url": "HOST/api/download/user/profile-picture",
+    "title": "Profile Picture",
+    "version": "1.0.0",
+    "name": "DownloadProfilePicture",
+    "description": "<p>Returns the url of auth user's profile picture</p>",
+    "group": "File_Download",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "BLOB",
+            "optional": false,
+            "field": "the",
+            "description": "<p>attached file</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/Api/FileController.php",
+    "groupTitle": "File_Download",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>A JWT Token, e.g. &quot;Bearer {token}&quot;</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "POST",
     "url": "HOST/api/upload/activity/answer",
-    "title": "Activity Answer",
+    "title": "",
     "version": "1.0.0",
     "name": "UploadActivityAnswer",
     "description": "<p>Allows adding answers to activity</p>",
@@ -828,6 +923,13 @@
             "optional": false,
             "field": "title",
             "description": "<p>title of the Lesson Plan</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "class_id",
+            "description": "<p>the class ID</p>"
           }
         ]
       }
@@ -958,7 +1060,7 @@
   {
     "type": "POST",
     "url": "HOST/api/upload/user/profile-picture",
-    "title": "Profile Picture",
+    "title": "",
     "version": "1.0.0",
     "name": "UploadUserProfilePicture",
     "description": "<p>Allows users to upload/change profile picture</p>",
@@ -1041,7 +1143,7 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "URL",
+            "field": "url",
             "description": "<p>web link of the lesson plan.</p>"
           },
           {
@@ -1195,6 +1297,13 @@
             "group": "Success 200",
             "type": "Number",
             "optional": false,
+            "field": "id",
+            "description": "<p>student improvement ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
             "field": "class_id",
             "description": "<p>Class ID</p>"
           },
@@ -1287,6 +1396,13 @@
             "group": "Success 200",
             "type": "Number",
             "optional": false,
+            "field": "id",
+            "description": "<p>student improvement ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
             "field": "class_id",
             "description": "<p>Class ID</p>"
           },
@@ -1357,7 +1473,7 @@
     "title": "Schedule Detail",
     "version": "1.0.0",
     "name": "ScheduleDetail",
-    "description": "<p>Returns schedule object of the specified schedule ID</p>",
+    "description": "<p>Returns schedule detail of specified ID</p>",
     "group": "Schedule",
     "parameter": {
       "fields": {
@@ -1368,18 +1484,21 @@
             "optional": false,
             "field": "id",
             "description": "<p>The schedule ID</p>"
-          },
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/Api/ScheduleController.php",
+    "groupTitle": "Schedule",
+    "header": {
+      "fields": {
+        "Header": [
           {
-            "group": "Parameter",
+            "group": "Header",
             "type": "String",
-            "allowedValues": [
-              "materials",
-              "activities",
-              "lessonPlans"
-            ],
             "optional": false,
-            "field": "include",
-            "description": "<p>comma separated; available relations to include</p>"
+            "field": "Authorization",
+            "description": "<p>A JWT Token, e.g. &quot;Bearer {token}&quot;</p>"
           }
         ]
       }
@@ -1392,28 +1511,35 @@
             "type": "Number",
             "optional": false,
             "field": "id",
-            "description": "<p>the schedule ID</p>"
+            "description": "<p>Unique schedule id</p>"
           },
           {
             "group": "Success 200",
             "type": "Date",
             "optional": false,
             "field": "from",
-            "description": "<p>date/time start of session</p>"
+            "description": "<p>Session start</p>"
           },
           {
             "group": "Success 200",
             "type": "Date",
             "optional": false,
             "field": "to",
-            "description": "<p>date/time end of session</p>"
+            "description": "<p>Session end</p>"
           },
           {
             "group": "Success 200",
-            "type": "Object",
+            "type": "Number",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Session status: done, canceled</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
             "optional": false,
             "field": "teacher",
-            "description": "<p>the teacher handling this session (could be different from the class adviser if re-assignment happens)</p>"
+            "description": "<p>teacher handling this session</p>"
           },
           {
             "group": "Success 200",
@@ -1427,35 +1553,28 @@
             "type": "String",
             "optional": false,
             "field": "teacher.first_name",
-            "description": ""
+            "description": "<p>Teacher name</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "teacher.last_name",
-            "description": ""
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>&quot;&quot; or CANCELED</p>"
+            "description": "<p>Teacher name</p>"
           },
           {
             "group": "Success 200",
             "type": "Array",
             "optional": false,
             "field": "materials",
-            "description": "<p>list of materials used in the session (or empty)</p>"
+            "description": "<p>Class resources: notes, lessons, etc</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
             "field": "materials.id",
-            "description": "<p>the activity ID</p>"
+            "description": "<p>Unique material id</p>"
           },
           {
             "group": "Success 200",
@@ -1469,56 +1588,49 @@
             "type": "String",
             "optional": false,
             "field": "materials.uploaded_file",
-            "description": "<p>link to uploaded file or</p>"
+            "description": "<p>If there's any uploaded file e.g. pdf, word, excel, ppt</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "materials.resource_link",
-            "description": "<p>a shared reference link (google docs, etc)</p>"
+            "description": "<p>Link to materials e.g google doc, website,etc</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
             "field": "materials.added_by",
-            "description": "<p>the teacher/user who added this material</p>"
+            "description": "<p>Someone who added the material</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
             "field": "materials.added_by.id",
-            "description": ""
+            "description": "<p>ID of uploader</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "materials.added_by.first_name",
-            "description": ""
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "materials.added_by.last_name",
-            "description": ""
+            "field": "materials.added_by.name",
+            "description": "<p>Name of uploader</p>"
           },
           {
             "group": "Success 200",
             "type": "Array",
             "optional": false,
             "field": "activities",
-            "description": "<p>the activitiy list of the session (or empty)</p>"
+            "description": "<p>List of activities attached to the session</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
             "field": "activities.id",
-            "description": "<p>the activity ID</p>"
+            "description": "<p>The activity id</p>"
           },
           {
             "group": "Success 200",
@@ -1531,15 +1643,15 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "activities.desription",
+            "field": "activities.description",
             "description": ""
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "activities.activit_type",
-            "description": "<p>&quot;class activity&quot; or &quot;assignment&quot;</p>"
+            "field": "activities.activity_type",
+            "description": ""
           },
           {
             "group": "Success 200",
@@ -1560,60 +1672,45 @@
             "type": "String",
             "optional": false,
             "field": "activities.status",
-            "description": "<p>&quot;published&quot; or &quot;unpublished&quot;</p>"
+            "description": "<p>published/unpublished</p>"
           },
           {
             "group": "Success 200",
             "type": "Array",
             "optional": false,
             "field": "activities.materials",
-            "description": "<p>array of references/materials for this activity (or empty)</p>"
+            "description": "<p>Array of reading materials needed for this activity</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
             "field": "activities.materials.id",
-            "description": "<p>the material ID</p>"
+            "description": ""
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "activities.materials.uploaded_file",
-            "description": "<p>link to uploaded file or</p>"
+            "description": "<p>If there's any uploaded file e.g. pdf, word, excel, ppt</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "activities.materials.resource_link",
-            "description": "<p>a shared reference link (google docs, etc)</p>"
+            "description": "<p>Link to materials e.g google doc, website,etc</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Sample Response",
-          "content": "{\n    \"id\": 1,\n    \"from\": \"2020-05-15 09:00:00\",\n    \"to\": \"2020-05-15 10:00:00\",\n    \"teacher\": {\n        \"id\": 8,\n        \"first_name\": \"teacher tom\",\n        \"last_name\": \"cruz\"\n    },\n    \"status\": \"\",\n    \"materials\": [\n        {\n            \"id\": 1,\n            \"title\": \"English Writing Part 1\",\n            \"uploaded_file\": \"\",\n            \"resource_link\": \"https://sample-lesson-link.com/english-writing-part1\",\n            \"added_by\": {\n                \"id\": 8,\n                \"first_name\": \"teacher tom\",\n                \"last_name\": \"cruz\"\n            }\n        },\n        {\n            \"id\": 2,\n            \"title\": \"English Writing Part 1\",\n            \"uploaded_file\": \"\",\n            \"resource_link\": \"https://sample-lesson-link.com/english-writing-part2\",\n            \"added_by\": {\n                \"id\": 8,\n                \"first_name\": \"teacher tom\",\n                \"last_name\": \"cruz\"\n            }\n        }\n    ],\n    \"activities\": [\n        {\n            \"id\": 1,\n            \"title\": \"English Assignment 1\",\n            \"description\": \"read it\",\n            \"activity_type\": \"class activity\",\n            \"available_from\": \"2020-05-11\",\n            \"available_to\": \"2020-05-15\",\n            \"status\": \"unpublished\",\n            \"materials\": [\n                {\n                    \"id\": 1,\n                    \"uploaded_file\": \"\",\n                    \"resource_link\": \"http://read-english.com/basics\"\n                },\n                {}\n            ]\n        },\n        {\n            \"id\": 2,\n            \"title\": \"English Assignment 2\",\n            \"description\": \"read it\",\n            \"activity_type\": \"class activity\",\n            \"available_from\": \"2020-05-20\",\n            \"available_to\": \"2020-05-30\",\n            \"status\": \"unpublished\",\n            \"materials\": [\n                {\n                    \"id\": 3,\n                    \"uploaded_file\": \"http://link-to-uploaded-file/sample\",\n                    \"resource_link\": \"\"\n                }\n            ]\n        }\n    ],\n    \"lessonPlans\": [\n        {\n            \"id\": 1,\n            \"title\": null,\n            \"uploaded_file\": \"http://api.talina.local:8080/api/download/class/material/1\",\n            \"resource_link\": null,\n            \"added_by\": {\n                \"id\": 8,\n                \"first_name\": \"teacher tom\",\n                \"last_name\": \"cruz\"\n            }\n        }\n    ]\n}",
+          "content": "{\n    \"id\": 1,\n    \"from\": \"2020-05-15 01:00:00\",\n    \"to\": \"2020-05-15 02:00:00\",\n    \"teacher\": {\n        \"id\": 9,\n        \"first_name\": \"teacher jayson\",\n        \"last_name\": \"barino\"\n    },\n    \"status\": 0,\n    \"materials\": [\n        {\n            \"id\": 1,\n            \"title\": \"English Writing Part 1\",\n            \"instruction\": \"read the textbook\",\n            \"description\": \"learn english writing\",\n            \"uploaded_file\": null,\n            \"resource_link\": \"https://sample-lesson-link.com/english-writing-part1\",\n            \"added_by\": {\n                \"id\": 8,\n                \"name\": null\n            }\n        },\n        {\n            \"id\": 2,\n            \"title\": \"English Writing Part 1\",\n            \"instruction\": \"read the textbook\",\n            \"description\": \"learn english writing\",\n            \"uploaded_file\": null,\n            \"resource_link\": \"https://sample-lesson-link.com/english-writing-part2\",\n            \"added_by\": {\n                \"id\": 8,\n                \"name\": null\n            }\n        }\n    ],\n    \"activities\": [\n        {\n            \"id\": 1,\n            \"title\": \"English Assignment 1\",\n            \"instruction\": \"read it\",\n            \"available_from\": \"2020-05-11\",\n            \"available_to\": \"2020-05-15\",\n            \"questions\": [\n                {\n                    \"id\": 1,\n                    \"question\": \"what is noun?\"\n                },\n                {\n                    \"id\": 2,\n                    \"question\": \"what is adverb\"\n                },\n                {\n                    \"id\": 3,\n                    \"question\": \"what is predicate?\"\n                }\n            ],\n            \"materials\": [\n                {\n                    \"id\": 1,\n                    \"uploaded_file\": \"\",\n                    \"resource_link\": \"http://read-english.com/basics\"\n                },\n                {\n                    \"id\": 2,\n                    \"uploaded_file\": \"\",\n                    \"resource_link\": \"http://read-english.com/basics2\"\n                }\n            ]\n        },\n        {\n            \"id\": 2,\n            \"title\": \"English Assignment 2\",\n            \"instruction\": \"read it\",\n            \"available_from\": \"2020-05-20\",\n            \"available_to\": \"2020-05-30\",\n            \"questions\": [\n                {\n                    \"id\": 4,\n                    \"question\": \"what is pronoun?\"\n                },\n                {\n                    \"id\": 5,\n                    \"question\": \"what is subject\"\n                },\n                {\n                    \"id\": 6,\n                    \"question\": \"what is plural?\"\n                }\n            ],\n            \"materials\": [\n                {\n                    \"id\": 3,\n                    \"uploaded_file\": \"\",\n                    \"resource_link\": \"http://read-english.com/basics3\"\n                }\n            ]\n        }\n    ]\n}",
           "type": "json"
         }
       ]
-    },
-    "filename": "app/Http/Controllers/Api/ScheduleController.php",
-    "groupTitle": "Schedule",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>A JWT Token, e.g. &quot;Bearer {token}&quot;</p>"
-          }
-        ]
-      }
     }
   },
   {
@@ -1636,16 +1733,16 @@
           },
           {
             "group": "Parameter",
-            "type": "DateTime",
+            "type": "Date",
             "optional": false,
-            "field": "date_from",
+            "field": "from",
             "description": "<p>New start date/time (YYYY-mm-dd H:i:s)</p>"
           },
           {
             "group": "Parameter",
-            "type": "DateTime",
+            "type": "Date",
             "optional": false,
-            "field": "date_to",
+            "field": "to",
             "description": "<p>New end date/time  (YYYY-mm-dd H:i:s)</p>"
           },
           {
@@ -1653,19 +1750,20 @@
             "type": "Number",
             "optional": false,
             "field": "teacher_id",
-            "description": "<p>teacher id of new assigned teacher</p>"
+            "description": "<p>User ID of new assigned teacher</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "allowedValues": [
-              "0:not-started",
-              "1:ongoing",
-              "2:canceled"
+              "PENDING",
+              "DONE",
+              "ONGOING",
+              "CANCELED"
             ],
             "optional": false,
             "field": "status",
-            "description": "<p>0 - not started, 1 - ongoing, 2 - cancelled</p>"
+            "description": ""
           }
         ]
       }
@@ -1685,28 +1783,28 @@
             "type": "DateTime",
             "optional": false,
             "field": "from",
-            "description": "<p>the new start date/time</p>"
+            "description": "<p>session start time</p>"
           },
           {
             "group": "Success 200",
             "type": "DateTime",
             "optional": false,
             "field": "to",
-            "description": "<p>the new end date/time</p>"
+            "description": "<p>schedule end time</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
             "field": "teacher",
-            "description": "<p>the new assigned teacher</p>"
+            "description": ""
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
             "field": "teacher.id",
-            "description": ""
+            "description": "<p>the teacher ID</p>"
           },
           {
             "group": "Success 200",
@@ -1721,13 +1819,26 @@
             "optional": false,
             "field": "teacher.last_name",
             "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "allowedValues": [
+              "PENDING",
+              "DONE",
+              "ONGOING",
+              "CANCELED"
+            ],
+            "optional": false,
+            "field": "status",
+            "description": "<p>schedule status</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Sample Response",
-          "content": "{\n    \"id\": 1,\n    \"from\": \"2020-05-31 15:00:00\",\n    \"to\": \"2020-05-31 16:00:00\",\n    \"teacher\": {\n        \"id\": 9,\n        \"first_name\": \"teacher jayson\",\n        \"last_name\": \"barino\"\n    },\n    \"status\": \"\"\n}",
+          "content": "{\n    \"id\": 1,\n    \"from\": \"2020-05-21 10:00:00\",\n    \"to\": \"2020-05-21 11:00:00\",\n    \"teacher\": {\n        \"id\": 9,\n        \"first_name\": \"teacher jayson\",\n        \"last_name\": \"barino\"\n    },\n    \"status\": \"DONE\"\n}",
           "type": "json"
         }
       ]
@@ -1824,9 +1935,15 @@
           {
             "group": "Success 200",
             "type": "String",
+            "allowedValues": [
+              "PENDING",
+              "ONGOING",
+              "DONE",
+              "CANCELED"
+            ],
             "optional": false,
             "field": "status",
-            "description": "<p>&quot;&quot; or CANCELED</p>"
+            "description": ""
           },
           {
             "group": "Success 200",
@@ -1860,7 +1977,7 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "activities.activit_type",
+            "field": "activities.activity_type",
             "description": "<p>&quot;class activity&quot; or &quot;assignment&quot;</p>"
           },
           {
@@ -1882,7 +1999,7 @@
             "type": "String",
             "optional": false,
             "field": "activities.status",
-            "description": "<p>&quot;published&quot; or &quot;unpublished&quot;</p>"
+            "description": "<p>&quot;published&quot;</p>"
           },
           {
             "group": "Success 200",
@@ -1917,7 +2034,7 @@
       "examples": [
         {
           "title": "Sample Response",
-          "content": "[\n    {\n        \"id\": 1,\n        \"from\": \"2020-05-15 09:00:00\",\n        \"to\": \"2020-05-15 10:00:00\",\n        \"teacher\": {\n            \"id\": 8,\n            \"first_name\": \"teacher tom\",\n            \"last_name\": \"cruz\"\n        },\n        \"status\": \"\",\n        \"activities\": [\n            {\n                \"id\": 1,\n                \"title\": \"English Assignment 1\",\n                \"description\": \"read it\",\n                \"activity_type\": \"class activity\",\n                \"available_from\": \"2020-05-11\",\n                \"available_to\": \"2020-05-15\",\n                \"status\": \"unpublished\",\n                \"materials\": [\n                    {\n                        \"id\": 1,\n                        \"uploaded_file\": \"\",\n                        \"resource_link\": \"http://read-english.com/basics\"\n                    },\n                    {\n                        \"id\": 1,\n                        \"uploaded_file\": \"http://link-to-uploaded-file.com/sample\",\n                        \"resource_link\": \"\"\n                    },\n            {}\n                ]\n            },\n            {}\n        ]\n    },\n    {\n        \"id\": 2,\n        \"from\": \"2020-05-18 09:00:00\",\n        \"to\": \"2020-05-18 10:00:00\",\n        \"teacher\": {\n            \"id\": 8,\n            \"first_name\": \"teacher tom\",\n            \"last_name\": \"cruz\"\n        },\n        \"status\": \"\",\n        \"activities\": []\n    }\n]",
+          "content": "[\n    {\n        \"id\": 1,\n        \"from\": \"2020-05-15 09:00:00\",\n        \"to\": \"2020-05-15 10:00:00\",\n        \"teacher\": {\n            \"id\": 8,\n            \"first_name\": \"teacher tom\",\n            \"last_name\": \"cruz\"\n        },\n        \"status\": \"\",\n        \"publishedActivities\": [\n            {\n                \"id\": 1,\n                \"title\": \"English Assignment 1\",\n                \"description\": \"read it\",\n                \"activity_type\": \"class activity\",\n                \"available_from\": \"2020-05-11\",\n                \"available_to\": \"2020-05-15\",\n                \"status\": \"published\",\n                \"materials\": [\n                    {\n                        \"id\": 1,\n                        \"uploaded_file\": \"\",\n                        \"resource_link\": \"http://read-english.com/basics\"\n                    },\n                    {\n                        \"id\": 1,\n                        \"uploaded_file\": \"http://link-to-uploaded-file.com/sample\",\n                        \"resource_link\": \"\"\n                    },\n            {}\n                ]\n            },\n            {}\n        ]\n    },\n    {\n        \"id\": 2,\n        \"from\": \"2020-05-18 09:00:00\",\n        \"to\": \"2020-05-18 10:00:00\",\n        \"teacher\": {\n            \"id\": 8,\n            \"first_name\": \"teacher tom\",\n            \"last_name\": \"cruz\"\n        },\n        \"status\": \"\",\n        \"activities\": []\n    }\n]",
           "type": "json"
         }
       ]
@@ -2326,9 +2443,15 @@
           {
             "group": "Success 200",
             "type": "String",
+            "allowedValues": [
+              "PENDING",
+              "ONGOING",
+              "DONE",
+              "CANCELED"
+            ],
             "optional": false,
             "field": "status",
-            "description": "<p>&quot;&quot; or CANCELED</p>"
+            "description": ""
           },
           {
             "group": "Success 200",
@@ -2506,9 +2629,15 @@
           {
             "group": "Success 200",
             "type": "String",
+            "allowedValues": [
+              "PENDING",
+              "ONGOING",
+              "DONE",
+              "CANCELED"
+            ],
             "optional": false,
             "field": "status",
-            "description": "<p>&quot;&quot; or CANCELED</p>"
+            "description": ""
           },
           {
             "group": "Success 200",
@@ -2992,9 +3121,15 @@
           {
             "group": "Success 200",
             "type": "String",
+            "allowedValues": [
+              "PENDING",
+              "ONGOING",
+              "DONE",
+              "CANCELED"
+            ],
             "optional": false,
             "field": "status",
-            "description": "<p>&quot;&quot; or CANCELED</p>"
+            "description": ""
           },
           {
             "group": "Success 200",
@@ -3495,9 +3630,15 @@
           {
             "group": "Success 200",
             "type": "String",
+            "allowedValues": [
+              "PENDING",
+              "ONGOING",
+              "DONE",
+              "CANCELED"
+            ],
             "optional": false,
             "field": "status",
-            "description": "<p>&quot;&quot; or CANCELED</p>"
+            "description": ""
           },
           {
             "group": "Success 200",
@@ -3664,9 +3805,15 @@
           {
             "group": "Success 200",
             "type": "String",
+            "allowedValues": [
+              "PENDING",
+              "ONGOING",
+              "DONE",
+              "CANCELED"
+            ],
             "optional": false,
             "field": "status",
-            "description": "<p>&quot;&quot; or CANCELED</p>"
+            "description": ""
           },
           {
             "group": "Success 200",
@@ -3845,9 +3992,15 @@
           {
             "group": "Success 200",
             "type": "String",
+            "allowedValues": [
+              "PENDING",
+              "ONGOING",
+              "DONE",
+              "CANCELED"
+            ],
             "optional": false,
             "field": "status",
-            "description": "<p>&quot;&quot; or CANCELED</p>"
+            "description": ""
           },
           {
             "group": "Success 200",
@@ -4182,6 +4335,13 @@
           },
           {
             "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "room_number",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "frequency",
@@ -4238,6 +4398,13 @@
           },
           {
             "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "next_schedule.status",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
             "type": "Object",
             "optional": false,
             "field": "teacher",
@@ -4269,7 +4436,7 @@
       "examples": [
         {
           "title": "Sample Response",
-          "content": "[\n    {\n        \"id\": 1,\n        \"name\": \"English 101\",\n        \"description\": \"learn basics\",\n        \"frequency\": \"M,W,F\",\n        \"date_from\": \"2020-05-11\",\n        \"date_to\": \"2020-05-15\",\n        \"time_from\": \"09:00:00\",\n        \"time_to\": \"10:00:00\",\n        \"next_schedule\": {\n            \"from\": \"2020-05-25 09:00:00\",\n            \"to\": \"2020-05-25 10:00:00\"\n        },\n        \"subject\": {\n            \"id\": 1,\n            \"name\": \"English\"\n        },\n        \"teacher\": {\n            \"id\": 8,\n            \"first_name\": \"teacher tom\",\n            \"last_name\": \"cruz\"\n        }\n    },\n    {},\n    {}\n]",
+          "content": "[\n    {\n        \"id\": 1,\n        \"name\": \"English 101\",\n        \"description\": \"learn basics\",\n        \"room_number\": 123455,\n        \"frequency\": \"M,W,F\",\n        \"date_from\": \"2020-05-11\",\n        \"date_to\": \"2020-05-15\",\n        \"time_from\": \"09:00:00\",\n        \"time_to\": \"10:00:00\",\n        \"next_schedule\": {\n            \"from\": \"2020-05-25 09:00:00\",\n            \"to\": \"2020-05-25 10:00:00\"\n            \"status\": \"DONE\"\n        },\n        \"subject\": {\n            \"id\": 1,\n            \"name\": \"English\"\n        },\n        \"teacher\": {\n            \"id\": 8,\n            \"first_name\": \"teacher tom\",\n            \"last_name\": \"cruz\"\n        }\n    },\n    {},\n    {}\n]",
           "type": "json"
         }
       ]
